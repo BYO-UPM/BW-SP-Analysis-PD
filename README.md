@@ -3,7 +3,7 @@ By M. Bejani, E. Luque-Buzo, A. Burlaka-Petrash, J. A. Gómez-García, J. D. Ari
 
 This paper has been submitted for publication in 'IEEE Acsses' journal.
 
-Repository of VOG-SPEM recordings of Patients with and with-out Parkinson Disease with a Ground Truth and Baseline Wander delimitation. 
+Repository of VOG-SPEM recordings of Patients with and with-out Parkinson's Disease, and a Baseline Wander estimation algorithm. 
 
 ## Abstract:  
 
