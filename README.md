@@ -52,5 +52,16 @@ All source code is made available under a 'MIT' license. You can freely
 use and modify the code, without warranty, so long as you provide attribution
 to the authors.
 
-The manuscript text is not open source. The authors reserve the rights to the
-article content, which is currently submitted for publication in the journal 'IEEE Acsses'.
+M. Bejani, E. Luque-Buzo, A. Burlaka-Petrash, J.A. Gómez-García, J.D. Arias-Londoño, F. Grandas-Pérez, J. Grajal, J.I. Godino-Llorente. Baseline wander removal applied to smooth pursuit eye movements from parkinsonian patients. IEEE Access, vol 11. 2023. [Open access](https://ieeexplore.ieee.org/document/10086500)
+
+If you find our work useful, can cite our paper using:
+
+```
+@article{bejani2023baseline,
+  title={Baseline wander removal applied to smooth pursuit eye movements from parkinsonian patients},
+  author={Bejani, M. and Luque-Buzo, E. and Burlaka-Petrash, A. and G{\'o}mez-Garc{\'\i}a, J.A. and Arias-Londo{\~n}o, J.D. and Grandas-P{\'e}rez, F. and Grajal, J. and Godino-Llorente, J.I.},
+  journal={IEEE Access},
+  volume = {11},
+  year={2023},
+ }
+```
