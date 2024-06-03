@@ -22,7 +22,7 @@ function varargout = Baseline_Wander_estimation(varargin)
 
 % Edit the above text to modify the response to help Baseline_Wander_estimation
 
-% Last Modified by GUIDE v2.5 20-Sep-2022 23:24:47
+% Last Modified by GUIDE v2.5 03-Jun-2024 15:18:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -407,108 +407,231 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
+addpath(genpath('./'))
+RadioButton=get(handles.uibuttongroup2,'SelectedObject');
+StringName = get(RadioButton, 'String');
+if strcmp(StringName,'Baseline wander estimation')
 
-set(handles.checkbox1,'Value',0.0)
-set(handles.checkbox2,'Value',0.0)
-set(handles.checkbox3,'Value',0.0)
-set(handles.checkbox4,'Value',0.0)
-set(handles.checkbox5,'Value',0.0)
-set(handles.checkbox6,'Value',0.0)
-set(handles.checkbox7,'Value',0.0)
+    set(handles.checkbox1,'Value',0.0)
+    set(handles.checkbox2,'Value',0.0)
+    set(handles.checkbox3,'Value',0.0)
+    set(handles.checkbox4,'Value',0.0)
+    set(handles.checkbox5,'Value',0.0)
+    set(handles.checkbox6,'Value',0.0)
+    set(handles.checkbox7,'Value',0.0)
 
-set(handles.checkbox1,'Enable','off')
-set(handles.checkbox2,'Enable','off')
-set(handles.checkbox3,'Enable','off')
-set(handles.checkbox4,'Enable','off')
-set(handles.checkbox5,'Enable','off')
-set(handles.checkbox6,'Enable','off')
-set(handles.checkbox7,'Enable','off')
+    set(handles.checkbox1,'Enable','off')
+    set(handles.checkbox2,'Enable','off')
+    set(handles.checkbox3,'Enable','off')
+    set(handles.checkbox4,'Enable','off')
+    set(handles.checkbox5,'Enable','off')
+    set(handles.checkbox6,'Enable','off')
+    set(handles.checkbox7,'Enable','off')
 
-cla(handles.axes1,'reset')
-cla(handles.axes2,'reset')
+    cla(handles.axes1,'reset')
+    cla(handles.axes2,'reset')
 
-a1= get(hObject,'Value');
-if (a1==1)
-  CreateStruct.Interpreter = 'tex';
-CreateStruct.WindowStyle = 'modal';
-f = errordlg(' \fontsize{17} Please Select a file','File Error', CreateStruct);
-% f = errordlg(' Please Select a file','File Error');
-return
-elseif (a1==2)
-    f = fullfile('Data','HF011');
-elseif (a1==3)
-    f = fullfile('Data','HG023');
-elseif (a1==4)
-    f = fullfile('Data','HG051');
-elseif (a1==5)
-    f = fullfile('Data','HG059');
+    a1= get(hObject,'Value');
+    if (a1==1)
+        CreateStruct.Interpreter = 'tex';
+        CreateStruct.WindowStyle = 'modal';
+        f = errordlg(' \fontsize{17} Please Select a file','File Error', CreateStruct);
+        % f = errordlg(' Please Select a file','File Error');
+        return
+    elseif (a1==2)
+        f = fullfile('Data','HF011');
+    elseif (a1==3)
+        f = fullfile('Data','HG023');
+    elseif (a1==4)
+        f = fullfile('Data','HG051');
+    elseif (a1==5)
+        f = fullfile('Data','HG059');
+    end
+
+    data = load(f);
+    xL = data.Gaze_L;
+    Gaze_L = (xL - min(xL))/(max(xL)-min(xL));
+    GT_L = (data.GT_L - min(xL))/(max(xL)-min(xL));
+    Target_L = (data.Target - min(xL))/(max(xL)-min(xL));
+
+    xR = data.Gaze_R;
+    Gaze_R = (xR - min(xR))/(max(xR)-min(xR));
+    GT_R = (data.GT_R - min(xR))/(max(xR)-min(xR));
+    Target_R = (data.Target - min(xR))/(max(xR)-min(xR));
+
+    handles.EMDBW = 0;
+    handles.VMDBW = 0;
+    handles.FDMBW = 0;
+    handles.EWTBW = 0;
+    handles.MAFBW = 0;
+    handles.IIRBW = 0;
+    handles.EMD2BW = 0;
+
+    handles.Gaze_L = Gaze_L;
+    handles.Gaze_R = Gaze_R;
+    guidata(hObject,handles);
+
+    %% plot left signals
+    axes(handles.axes1);
+    plot(Target_L,'--', 'LineWidth',1.5,'DisplayName', ['Target'])
+    hold on
+    plot(Gaze_L,'LineWidth',1.5,'DisplayName', ['Gaze'])
+    plot(GT_L,'LineWidth',1.5,'DisplayName', ['GT'])
+    legend();
+    newChr = strrep(f,'.mat','');
+    newChr = strrep(newChr,'Data','');
+    newChr = strrep(newChr,'\','');
+    newChr = strrep(newChr,'/','');
+    title(sprintf('Left eye of %s', newChr))
+    xlabel('Time (ms)')
+    ylabel('Amplitude')
+    grid on
+    grid minor
+    ylim([-0.05 1.05])
+    hold off
+
+    %% plot Right signals
+    axes(handles.axes2);
+    plot(Target_R,'--','LineWidth',1.5,'DisplayName', ['Target'])
+    hold on
+    plot(Gaze_R,'LineWidth',1.5,'DisplayName', ['Gaze'])
+    plot(GT_R,'LineWidth',1.5,'DisplayName', ['GT'])
+    legend();
+    title(sprintf('Right eye of %s', newChr))
+    xlabel('Time (ms)')
+    ylabel('Amplitude')
+    grid on
+    grid minor
+    ylim([-0.05 1.05])
+    hold off
+
+    set(handles.checkbox1,'Enable','on')
+    set(handles.checkbox2,'Enable','on')
+    set(handles.checkbox3,'Enable','on')
+    set(handles.checkbox4,'Enable','on')
+    set(handles.checkbox5,'Enable','on')
+    set(handles.checkbox6,'Enable','on')
+    set(handles.checkbox7,'Enable','on')
+else
+    String = get(handles.popupmenu1,'String');%Groups
+    file = String{get(handles.popupmenu1,'Value')};
+    f = fullfile('Data',strcat(file,'.mat'));
+    if isfile(f)
+        data = load(f);
+    else
+        CreateStruct.Interpreter = 'tex';
+        CreateStruct.WindowStyle = 'modal';
+        e = errordlg(' \fontsize{17} Please Select a file','File Error', CreateStruct);
+        return;
+    end
+
+    %-------------- BW removal --------------------------------------------
+    %X axis
+    [mra,~] = ewt(data.Gaze_L(:,1),'MaxNumPeaks',3);
+    level = select_level(data.Target(:,1),mra);
+    EWT_L_X = sum(mra(:,level),2);
+    if level ~= 3
+        EWT_L_X = sum(mra(:,2),2) + sum(mra(:,3),2);
+    end
+
+    [mra,~] = ewt(data.Gaze_R(:,1),'MaxNumPeaks',3);
+    level = select_level(data.Target(:,1),mra);
+    EWT_R_X = sum(mra(:,level),2);
+
+    if level ~= 3
+        EWT_R_X = sum(mra(:,2),2) + sum(mra(:,3),2);
+    end
+    
+    %------------ ICA decomposition ----------------------------------
+    
+    X_x =  [data.Gaze_L(:,1)-EWT_L_X,data.Gaze_R(:,1)-EWT_R_X];
+    Xn = zscore(X_x);
+    OBJ = rica(Xn,2);
+    ICAtrans_X = Xn*OBJ.TransformWeights;
+
+
+   %-----------------------------------------------------------------
+    %Remove the beginning and ending of the serie
+    i = 501;
+    l = 14500;
+    x = linspace(1,l-i+1,l-i+1);
+
+    %------------------- CERM selection -----------------------------
+    g = [ICAtrans_X(i:l,1);
+        ICAtrans_X(i:l,2)];
+    maxi_i = max(g);
+    mini_i = min(g);
+    %-----------------------------------------------------
+    X = X_x(i:l,:);
+    maxi_x = max(X,[],'all');
+    mini_x = min(X,[],'all');
+    %-----------------------------------------------------
+    C1 = maxmin_norm(ICAtrans_X(i:l,1),maxi_i,mini_i);
+    C2 = maxmin_norm(ICAtrans_X(i:l,2),maxi_i,mini_i);
+    var1 = (std(C1))^2;
+    var2 = (std(C2))^2;
+
+    s1 = maxmin_norm(X(:,1),maxi_x,mini_x);
+    s2 = maxmin_norm(X(:,2),maxi_x,mini_x);
+
+
+    %% Check correlation with original signals and adjust sign
+    corr_ic1_s1 = corr(C1, s1);
+    corr_ic1_s2 = corr(C1, s2);
+
+    if abs(corr_ic1_s1) > abs(corr_ic1_s2)
+        if corr_ic1_s1 < 0
+            C1 = 1-C1;
+        end
+    else
+        if corr_ic1_s2 < 0
+            C1 = 1-C1;
+        end
+    end
+
+    corr_ic2_s1 = corr(C2, s1);
+    corr_ic2_s2 = corr(C2, s2);
+    if abs(corr_ic2_s1) > abs(corr_ic2_s2)
+        if corr_ic2_s1 < 0
+            C2 = 1-C2;
+        end
+    else
+        if corr_ic2_s2 < 0
+            C2 = 1-C2;
+        end
+    end
+    %--------
+    if var1 >= var2
+        CERM_X = C1;
+        NO_CERM_X = C2;
+
+    else
+        CERM_X = C2;
+        NO_CERM_X = C1;
+    end
+    
+    %-------------------------- Plots -------------------------------------
+    axes(handles.axes1);
+    plot(x,s1,'Color','b')
+    hold on;
+    plot(x,s2,'Color','r')
+    legend({'$s_{1}[n]$','$s_{2}[n]$'},'Interpreter','latex','Location','best','FontSize',14);
+    legend('boxoff')
+    ylabel('Norm. Amp.','FontSize',12)
+    xlabel('Time (ms)','FontSize',12)
+    hold off;
+    
+    axes(handles.axes2);
+    plot(x,CERM_X,'Color','b')
+    hold on;
+    plot(x,NO_CERM_X,'Color','r')
+    legend({'CERM','NO\_CERM'},'Interpreter','latex','Location','best','FontSize',14);
+    legend('boxoff')
+    ylabel('Norm. Amp.','FontSize',12)
+    xlabel('Time (ms)','FontSize',12)
+    hold off;
+
 end
-
-data = load(f);
-xL = data.Gaze_L;
-Gaze_L = (xL - min(xL))/(max(xL)-min(xL));
-GT_L = (data.GT_L - min(xL))/(max(xL)-min(xL));
-Target_L = (data.Target - min(xL))/(max(xL)-min(xL));
-
-xR = data.Gaze_R;
-Gaze_R = (xR - min(xR))/(max(xR)-min(xR));
-GT_R = (data.GT_R - min(xR))/(max(xR)-min(xR));
-Target_R = (data.Target - min(xR))/(max(xR)-min(xR));
-
-handles.EMDBW = 0;
-handles.VMDBW = 0;
-handles.FDMBW = 0;
-handles.EWTBW = 0;
-handles.MAFBW = 0;
-handles.IIRBW = 0;
-handles.EMD2BW = 0;
-
-handles.Gaze_L = Gaze_L;
-handles.Gaze_R = Gaze_R;
-guidata(hObject,handles);
-
-%% plot left signals
-axes(handles.axes1);
-plot(Target_L,'--', 'LineWidth',1.5,'DisplayName', ['Target'])
-hold on
-plot(Gaze_L,'LineWidth',1.5,'DisplayName', ['Gaze'])
-plot(GT_L,'LineWidth',1.5,'DisplayName', ['GT'])
-legend();
-newChr = strrep(f,'.mat','');
-newChr = strrep(newChr,'Data','');
-newChr = strrep(newChr,'\','');
-newChr = strrep(newChr,'/','');
-title(sprintf('Left eye of %s', newChr))
-xlabel('Time (ms)')
-ylabel('Amplitude')
-grid on
-grid minor
-ylim([-0.05 1.05])
-hold off
-
-%% plot Right signals
-axes(handles.axes2);
-plot(Target_R,'--','LineWidth',1.5,'DisplayName', ['Target'])
-hold on
-plot(Gaze_R,'LineWidth',1.5,'DisplayName', ['Gaze'])
-plot(GT_R,'LineWidth',1.5,'DisplayName', ['GT'])
-legend();
-title(sprintf('Right eye of %s', newChr))
-xlabel('Time (ms)')
-ylabel('Amplitude')
-grid on
-grid minor
-ylim([-0.05 1.05])
-hold off
-
-set(handles.checkbox1,'Enable','on')
-set(handles.checkbox2,'Enable','on')
-set(handles.checkbox3,'Enable','on')
-set(handles.checkbox4,'Enable','on')
-set(handles.checkbox5,'Enable','on')
-set(handles.checkbox6,'Enable','on')
-set(handles.checkbox7,'Enable','on')
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -529,3 +652,52 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in radiobutton3.
+function radiobutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton3
+
+
+% --- Executes when selected object is changed in uibuttongroup2.
+function uibuttongroup2_SelectionChangedFcn(hObject, eventdata, handles)
+% hObject    handle to the selected object in uibuttongroup2 
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+axes(handles.axes1);
+cla reset;
+axes(handles.axes2);
+cla reset;
+RadioButton=get(handles.uibuttongroup2,'SelectedObject');
+StringName = get(RadioButton, 'String');
+if strcmp(StringName,'Baseline wander estimation')
+    set(handles.text6,'Visible','on');
+    set(handles.uipanel1,'Visible','on');
+    set(handles.popupmenu1,'Value',1);
+
+    set(handles.checkbox1,'Value',0.0)
+    set(handles.checkbox2,'Value',0.0)
+    set(handles.checkbox3,'Value',0.0)
+    set(handles.checkbox4,'Value',0.0)
+    set(handles.checkbox5,'Value',0.0)
+    set(handles.checkbox6,'Value',0.0)
+    set(handles.checkbox7,'Value',0.0)
+
+    set(handles.checkbox1,'Enable','off')
+    set(handles.checkbox2,'Enable','off')
+    set(handles.checkbox3,'Enable','off')
+    set(handles.checkbox4,'Enable','off')
+    set(handles.checkbox5,'Enable','off')
+    set(handles.checkbox6,'Enable','off')
+    set(handles.checkbox7,'Enable','off')
+
+else
+    set(handles.text6,'Visible','off');
+    set(handles.uipanel1,'Visible','off');
+    set(handles.popupmenu1,'Value',1);
+    
+end
