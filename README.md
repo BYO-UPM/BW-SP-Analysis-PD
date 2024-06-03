@@ -66,7 +66,7 @@ You can freely use and modify the code, without warranty, so long as you provide
 
 M. Bejani, E. Luque-Buzo, A. Burlaka-Petrash, J.A. Gómez-García, J.D. Arias-Londoño, F. Grandas-Pérez, J. Grajal, J.I. Godino-Llorente. Baseline wander removal applied to smooth pursuit eye movements from parkinsonian patients. IEEE Access, vol 11. 2023. [Open access](https://ieeexplore.ieee.org/document/10086500)
 
-By E. Luque-Buzo, M. Bejani, J. A. Gómez-García, J. D. Arias-Londoño, F. Grandas-Pérez, J. I. Godino-Llorente. Estimation of the cyclopean eye from binocular Smooth Pursuit Tests. IEEE Transactions on Cognitive and Developmental Systems, in press, 2024 
+E. Luque-Buzo, M. Bejani, J. A. Gómez-García, J. D. Arias-Londoño, F. Grandas-Pérez, J. I. Godino-Llorente. Estimation of the cyclopean eye from binocular Smooth Pursuit Tests. IEEE Transactions on Cognitive and Developmental Systems, in press, 2024 
 
 If you find our work useful, can cite the papers using:
 
