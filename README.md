@@ -1,4 +1,4 @@
-# Baseline wander estimation methods applied to smooth pursuit eye movements from parkinsonian patient
+# Baseline wander estimation methods applied to smooth pursuit eye movements from parkinsonian patientd
 By M. Bejani, E. Luque-Buzo, A. Burlaka-Petrash, J. A. Gómez-García, J. D. Arias-Londoño, F. Grandas-Pérez, J. I. Godino-Llorente.
 
 IEEE Access, vol. 11, pp. 32119-32133, 2023, doi: 10.1109/ACCESS.2023.3263045.
