@@ -81,7 +81,7 @@ If you find our work useful, can cite the papers using:
 
 @article{luqe2024cyclopean,
   title={Baseline wander removal applied to smooth pursuit eye movements from parkinsonian patients},
-  author={Luque-Buzo, E., and Bejani, M. and G{\'o}mez-Garc{\'\i}a, J.A. and Arias-Londo{\~n}o, J.D. and Grandas-P{\'e}rez, F. and Godino-Llorente, J.I.},
+  author={Luque-Buzo, E. and Bejani, M. and G{\'o}mez-Garc{\'\i}a, J.A. and Arias-Londo{\~n}o, J.D. and Grandas-P{\'e}rez, F. and Godino-Llorente, J.I.},
   journal={IEEE Transactions on Cognitive and Developmental Systems},
   volume = {in press},
   year={2024},
