@@ -1,3 +1,6 @@
+
+This repository contains the source code and several signals to illustrate the results of the following publications:
+
 # Baseline wander estimation methods applied to smooth pursuit eye movements from parkinsonian patients
 By M. Bejani, E. Luque-Buzo, A. Burlaka-Petrash, J. A. Gómez-García, J. D. Arias-Londoño, F. Grandas-Pérez, J. I. Godino-Llorente.
 
